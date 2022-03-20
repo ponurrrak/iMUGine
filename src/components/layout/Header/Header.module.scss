@@ -1,0 +1,19 @@
+@import '../../../styles/settings.scss';
+
+.nav {
+  padding: 12px;
+  width: 100%;
+  height: $header-height;
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  color:inherit;
+  padding-right: 48px;
+  font-size: 18px;
+
+  &.active {
+    color: #DC004E;
+  }
+}
