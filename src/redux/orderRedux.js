@@ -2,31 +2,31 @@ import Axios from 'axios';
 import settings from '../settings';
 
 /* selectors */
-export const getCurrentProduct = ({currentProduct}) => currentProduct.data;
-export const getCurrentProductStatus = ({currentProduct}) => currentProduct.loading;
+export const getClient = ({order}) => order.data;
+export const getOrderId = ({order}) => order.data.orderId;
+export const getOrderStatus = ({order}) => order.loading;
 
 /* action name creator */
-const reducerName = 'currentProduct';
+const reducerName = 'order';
 const createActionName = name => `app/${reducerName}/${name}`;
 
 /* action types */
 const FETCH_START = createActionName('FETCH_START');
 const FETCH_SUCCESS = createActionName('FETCH_SUCCESS');
 const FETCH_ERROR = createActionName('FETCH_ERROR');
-const CLEAR_DATA = createActionName('CLEAR_DATA');
 
 /* action creators */
 export const fetchStarted = payload => ({ payload, type: FETCH_START });
 export const fetchSuccess = payload => ({ payload, type: FETCH_SUCCESS });
 export const fetchError = payload => ({ payload, type: FETCH_ERROR });
-export const clearData = payload => ({ payload, type: CLEAR_DATA });
 
-/* thunk creators */
-export const fetchCurrentProduct = productId => {
+/* thunks */
+export const sendOrder = () => {
   return (dispatch, getState) => {
+    const requestBody = getState();
     dispatch(fetchStarted());
     Axios
-      .get(`${settings.api.url}/${settings.api.endpoints.products}/${productId}`)
+      .post(`${settings.api.url}/${settings.api.endpoints.order}`, requestBody)
       .then(res => {
         dispatch(fetchSuccess(res.data));
       })
@@ -54,7 +54,10 @@ export const reducer = (statePart = {}, action = {}) => {
           active: false,
           error: false,
         },
-        data: action.payload,
+        data: {
+          ...statePart.data,
+          ...action.payload,
+        },
       };
     }
     case FETCH_ERROR: {
@@ -64,15 +67,6 @@ export const reducer = (statePart = {}, action = {}) => {
           active: false,
           error: action.payload,
         },
-      };
-    }
-    case CLEAR_DATA: {
-      return {
-        loading: {
-          active: false,
-          error: false,
-        },
-        data: {},
       };
     }
     default:

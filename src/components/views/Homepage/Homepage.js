@@ -40,8 +40,8 @@ const Component = ({ allProducts, loadingStatus, loadAllProducts }) => {
               to={'/product/' + product._id}
             >
               <ListItemText
-                primary={product.title}
-                secondary={product.description}
+                primary={product.name}
+                secondary={product.price}
               />
             </ListItem>
           ))}

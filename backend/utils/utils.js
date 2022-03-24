@@ -9,3 +9,11 @@ exports.parseErrors = err => {
   }
   return message;
 };
+
+exports.countTotalSum = productsArray => {
+  let total = 0;
+  for(const item of productsArray) {
+    total += item.count * item.product.price;
+  }
+  return total;
+};
